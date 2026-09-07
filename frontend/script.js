@@ -1,0 +1,484 @@
+let previousAlert = null;
+
+
+// =====================================
+// GET FARM STATUS
+// =====================================
+
+async function fetchFarmStatus() {
+
+    try {
+
+        const response = await fetch(
+            "/farm-status"
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const data = await response.json();
+
+
+        updateDashboard(data);
+
+
+    } catch (error) {
+
+        console.error(
+            "Farm status error:",
+            error
+        );
+
+        setOfflineStatus();
+
+    }
+
+}
+
+
+// =====================================
+// UPDATE DASHBOARD
+// =====================================
+
+function updateDashboard(data) {
+
+
+    // -------------------------------
+    // CONNECTION
+    // -------------------------------
+
+    const status =
+        document.getElementById(
+            "connectionStatus"
+        );
+
+
+    if (data.connected) {
+
+        status.innerHTML =
+            '<span class="dot"></span> SENSOR CONNECTED';
+
+    } else {
+
+        status.innerHTML =
+            '<span class="dot"></span> WAITING FOR SENSOR';
+
+    }
+
+
+    // -------------------------------
+    // SENSOR DATA
+    // -------------------------------
+
+    document.getElementById(
+        "temperature"
+    ).innerText =
+        data.tempreature !== null
+            ? `${data.tempreature} °C`
+            : "-- °C";
+
+
+    document.getElementById(
+        "humidity"
+    ).innerText =
+        data.humidity !== null
+            ? `${data.humidity} %`
+            : "-- %";
+
+
+    document.getElementById(
+        "soilMoisture"
+    ).innerText =
+        data.soil_moisture !== null
+            ? `${data.soil_moisture} %`
+            : "-- %";
+
+
+    // -------------------------------
+    // FARM INFORMATION
+    // -------------------------------
+
+    document.getElementById(
+        "crop"
+    ).innerText =
+        data.crop || "---";
+
+
+    document.getElementById(
+        "cropStage"
+    ).innerText =
+        data.crop_stage || "---";
+
+
+    document.getElementById(
+        "soilType"
+    ).innerText =
+        data.soil_type || "---";
+
+
+    document.getElementById(
+        "area"
+    ).innerText =
+        data.area || "---";
+
+
+    // -------------------------------
+    // AI
+    // -------------------------------
+
+    document.getElementById(
+        "observation"
+    ).innerText =
+        data.observation ||
+        "Waiting for AI...";
+
+
+    document.getElementById(
+        "decision"
+    ).innerText =
+        data.decision || "---";
+
+
+    document.getElementById(
+        "actionType"
+    ).innerText =
+        data.action_type || "---";
+
+
+    // -------------------------------
+    // HARDWARE
+    // -------------------------------
+
+    document.getElementById(
+        "hardwareCommand"
+    ).innerText =
+        data.hardware_command ??
+        "---";
+
+
+    document.getElementById(
+        "executedAction"
+    ).innerText =
+        data.executed_action ||
+        "---";
+
+
+    // -------------------------------
+    // SAFETY
+    // -------------------------------
+
+    document.getElementById(
+        "safetyStatus"
+    ).innerText =
+        data.safety_status ||
+        "WAITING";
+
+
+    document.getElementById(
+        "safetyReason"
+    ).innerText =
+        data.safety_reason ||
+        "---";
+
+
+    // -------------------------------
+    // VERIFICATION
+    // -------------------------------
+
+    document.getElementById(
+        "verificationStatus"
+    ).innerText =
+        data.verification_status ||
+        "---";
+
+
+    document.getElementById(
+        "verificationMessage"
+    ).innerText =
+        data.verification_message ||
+        "---";
+
+
+    // -------------------------------
+    // ALERT
+    // -------------------------------
+
+    const alertElement =
+        document.getElementById(
+            "alert"
+        );
+
+
+    if (data.alert) {
+
+        alertElement.innerText =
+            "🚨 " + data.alert;
+
+    } else {
+
+        alertElement.innerText =
+            "No active alerts.";
+
+    }
+
+
+    // -------------------------------
+    // FINAL RESPONSE
+    // -------------------------------
+
+    document.getElementById(
+        "response"
+    ).innerText =
+        data.response ||
+        "---";
+
+
+    // -------------------------------
+    // RAW API DATA
+    // -------------------------------
+
+    document.getElementById(
+        "rawJson"
+    ).innerText =
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+
+
+    // -------------------------------
+    // NOTIFICATION
+    // -------------------------------
+
+    handleNotification(data);
+
+}
+
+
+// =====================================
+// NOTIFICATIONS
+// =====================================
+
+function handleNotification(data) {
+
+    if (!data.alert) {
+
+        previousAlert = null;
+
+        return;
+
+    }
+
+
+    if (
+        data.alert !== previousAlert
+    ) {
+
+        sendNotification(
+            "ROBOAI Alert",
+            data.alert
+        );
+
+        previousAlert =
+            data.alert;
+
+    }
+
+}
+
+
+// =====================================
+// BROWSER NOTIFICATION
+// =====================================
+
+function sendNotification(
+    title,
+    message
+) {
+
+    if (
+        Notification.permission ===
+        "granted"
+    ) {
+
+        new Notification(
+            title,
+            {
+                body: message,
+                icon: "/static/icon.png"
+            }
+        );
+
+    }
+
+}
+
+
+// =====================================
+// ENABLE NOTIFICATIONS
+// =====================================
+
+document
+    .getElementById(
+        "notificationBtn"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !("Notification" in window)
+            ) {
+
+                alert(
+                    "Browser notifications are not supported."
+                );
+
+                return;
+
+            }
+
+
+            const permission =
+                await Notification.requestPermission();
+
+
+            if (
+                permission ===
+                "granted"
+            ) {
+
+                alert(
+                    "Notifications enabled."
+                );
+
+            }
+
+        }
+    );
+
+
+// =====================================
+// REFRESH
+// =====================================
+
+document
+    .getElementById(
+        "refreshBtn"
+    )
+    .addEventListener(
+        "click",
+        fetchFarmStatus
+    );
+
+
+// =====================================
+// CLEAR
+// =====================================
+
+document
+    .getElementById(
+        "clearBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            document.getElementById(
+                "observation"
+            ).innerText =
+                "Waiting for sensor data...";
+
+
+            document.getElementById(
+                "decision"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "actionType"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "hardwareCommand"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "executedAction"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "safetyStatus"
+            ).innerText =
+                "WAITING";
+
+
+            document.getElementById(
+                "safetyReason"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "verificationStatus"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "verificationMessage"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "alert"
+            ).innerText =
+                "No active alerts.";
+
+
+            document.getElementById(
+                "response"
+            ).innerText =
+                "Waiting for graph execution...";
+
+
+            document.getElementById(
+                "rawJson"
+            ).innerText =
+                "{}";
+
+        }
+    );
+
+
+// =====================================
+// AUTOMATIC POLLING
+// =====================================
+
+// Get latest farm data immediately
+
+fetchFarmStatus();
+
+
+// Then check every 3 seconds
+
+setInterval(
+    fetchFarmStatus,
+    3000
+);

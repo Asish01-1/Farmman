@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ROBOAI | Farm Intelligence</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <div>
+
+            <h1>
+                ROBO<span>AI</span>
+            </h1>
+
+            <p>
+                AI FARM INTELLIGENCE SYSTEM
+            </p>
+
+        </div>
+
+
+        <div id="connectionStatus"
+             class="status">
+
+            <span class="dot"></span>
+
+            WAITING FOR SENSOR
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+        <button
+            id="refreshBtn"
+            class="primary">
+
+            ↻ REFRESH
+
+        </button>
+
+
+        <button
+            id="notificationBtn">
+
+            🔔 ENABLE NOTIFICATIONS
+
+        </button>
+
+
+        <button
+            id="clearBtn">
+
+            CLEAR
+
+        </button>
+
+    </div>
+
+
+    <!-- FARM INFORMATION -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            FARM INFORMATION
+        </div>
+
+
+        <div class="farm-info">
+
+            <div>
+                <span>Crop</span>
+                <strong id="crop">---</strong>
+            </div>
+
+
+            <div>
+                <span>Stage</span>
+                <strong id="cropStage">---</strong>
+            </div>
+
+
+            <div>
+                <span>Soil</span>
+                <strong id="soilType">---</strong>
+            </div>
+
+
+            <div>
+                <span>Area</span>
+                <strong id="area">---</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SENSOR DATA -->
+
+    <section class="sensor-grid">
+
+
+        <div class="card">
+
+            <small>
+                TEMPERATURE
+            </small>
+
+            <strong id="temperature">
+                -- °C
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <small>
+                HUMIDITY
+            </small>
+
+            <strong id="humidity">
+                -- %
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <small>
+                SOIL MOISTURE
+            </small>
+
+            <strong id="soilMoisture">
+                -- %
+            </strong>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- AI OBSERVATION -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            AI OBSERVATION
+        </div>
+
+        <pre id="observation">
+Waiting for sensor data...
+        </pre>
+
+    </section>
+
+
+    <!-- AI OUTPUT -->
+
+    <section class="output-grid">
+
+
+        <div class="panel">
+
+            <div class="panel-title">
+                AI DECISION
+            </div>
+
+            <div
+                id="decision"
+                class="big-value">
+
+                ---
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-title">
+                ACTION TYPE
+            </div>
+
+            <div
+                id="actionType"
+                class="big-value">
+
+                ---
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-title">
+                HARDWARE COMMAND
+            </div>
+
+            <div
+                id="hardwareCommand"
+                class="big-value">
+
+                ---
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-title">
+                EXECUTED ACTION
+            </div>
+
+            <div
+                id="executedAction"
+                class="big-value">
+
+                ---
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- SAFETY -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            SAFETY VALIDATOR
+        </div>
+
+
+        <div
+            id="safetyStatus"
+            class="safe">
+
+            WAITING
+
+        </div>
+
+
+        <p id="safetyReason">
+            ---
+        </p>
+
+    </section>
+
+
+    <!-- VERIFICATION -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            VERIFICATION
+        </div>
+
+
+        <div id="verificationStatus">
+            ---
+        </div>
+
+
+        <p id="verificationMessage">
+            ---
+        </p>
+
+    </section>
+
+
+    <!-- ALERT -->
+
+    <section class="panel alert-panel">
+
+        <div class="panel-title">
+            ALERTS
+        </div>
+
+
+        <div id="alert">
+            No active alerts.
+        </div>
+
+    </section>
+
+
+    <!-- FINAL RESPONSE -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            LANGGRAPH RESPONSE
+        </div>
+
+
+        <pre id="response">
+Waiting for graph execution...
+        </pre>
+
+    </section>
+
+
+    <!-- RAW DATA -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            LIVE API DATA
+        </div>
+
+
+        <pre id="rawJson">
+Waiting...
+        </pre>
+
+    </section>
+
+
+    <footer>
+
+        ROBOAI
+        •
+        FastAPI
+        •
+        LangGraph
+        •
+        RAG
+        •
+        Groq
+
+    </footer>
+
+
+</div>
+
+
+<script src="/static/script.js"></script>
+
+</body>
+
+</html>

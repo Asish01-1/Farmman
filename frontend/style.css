@@ -1,0 +1,416 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    background: #080b0f;
+
+    color: #d7e2e8;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+}
+
+
+.container {
+
+    width: 92%;
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 30px 0;
+}
+
+
+/* HEADER */
+
+header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+
+h1 {
+
+    font-size: 34px;
+
+    letter-spacing: 3px;
+}
+
+
+h1 span {
+
+    color: #00e5a0;
+}
+
+
+header p {
+
+    color: #65747e;
+
+    font-size: 12px;
+
+    margin-top: 5px;
+}
+
+
+.status {
+
+    border: 1px solid #26343c;
+
+    padding: 10px 15px;
+
+    font-size: 12px;
+}
+
+
+.dot {
+
+    display: inline-block;
+
+    width: 8px;
+
+    height: 8px;
+
+    background: #64727a;
+
+    border-radius: 50%;
+
+    margin-right: 8px;
+}
+
+
+/* CONTROLS */
+
+.controls {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+    flex-wrap: wrap;
+}
+
+
+button {
+
+    background: #10161b;
+
+    color: #b9c8cf;
+
+    border: 1px solid #34434c;
+
+    padding: 11px 18px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+
+button:hover {
+
+    border-color: #00e5a0;
+
+    color: #00e5a0;
+}
+
+
+button.primary {
+
+    background: #00e5a0;
+
+    color: #06100c;
+
+    border: none;
+
+    font-weight: bold;
+}
+
+
+/* PANEL */
+
+.panel {
+
+    background: #0d1217;
+
+    border: 1px solid #202d35;
+
+    padding: 20px;
+
+    margin-bottom: 18px;
+}
+
+
+.panel-title {
+
+    color: #00e5a0;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 15px;
+}
+
+
+/* FARM INFO */
+
+.farm-info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+
+.farm-info span {
+
+    display: block;
+
+    color: #65747e;
+
+    font-size: 11px;
+
+    margin-bottom: 7px;
+}
+
+
+.farm-info strong {
+
+    font-size: 16px;
+}
+
+
+/* SENSOR */
+
+.sensor-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+
+.card {
+
+    background: #0d1217;
+
+    border: 1px solid #202d35;
+
+    padding: 20px;
+}
+
+
+.card small {
+
+    display: block;
+
+    color: #71818a;
+
+    font-size: 11px;
+
+    margin-bottom: 10px;
+}
+
+
+.card strong {
+
+    font-size: 27px;
+}
+
+
+/* GRAPH */
+
+.flow {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+
+.flow span {
+
+    border: 1px solid #29433d;
+
+    padding: 8px 12px;
+
+    color: #00e5a0;
+
+    font-size: 11px;
+}
+
+
+.flow b {
+
+    color: #56656d;
+}
+
+
+/* OUTPUT */
+
+.output-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+
+.big-value {
+
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+
+/* TERMINAL */
+
+pre {
+
+    white-space: pre-wrap;
+
+    word-wrap: break-word;
+
+    color: #b8c7cd;
+
+    line-height: 1.6;
+
+    font-family: inherit;
+}
+
+
+#rawJson {
+
+    max-height: 450px;
+
+    overflow: auto;
+
+    color: #8fa3ad;
+}
+
+
+/* SAFETY */
+
+.safe {
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    color: #00e5a0;
+}
+
+
+#safetyReason,
+#verificationMessage {
+
+    color: #81919a;
+
+    margin-top: 10px;
+}
+
+
+/* ALERT */
+
+.alert-panel {
+
+    border-left: 3px solid #9b6b00;
+}
+
+
+#alert {
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* FOOTER */
+
+footer {
+
+    text-align: center;
+
+    color: #46545c;
+
+    font-size: 11px;
+
+    padding: 25px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .farm-info {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .output-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .farm-info,
+    .sensor-grid,
+    .output-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+}
