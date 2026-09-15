@@ -425,16 +425,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -444,7 +434,6 @@ from graph import graph
 
 app = FastAPI()
 
-# Frontend
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 
@@ -454,7 +443,6 @@ class SensorData(BaseModel):
     soil_moisture: float
 
 
-# Store latest result in memory
 latest_farm_state = {}
 
 
@@ -477,27 +465,31 @@ def receive_sensor_data(data: SensorData):
         "tempreature": data.tempreature,
         "humidity": data.humidity,
         "soil_moisture": data.soil_moisture,
-
-        # Existing farm information
         "crop": "Rice",
         "crop_stage": "Vegetative",
         "soil_type": "Loamy",
-        "area": "Area A",
+        "area": "Area A"
     }
 
-    # Run LangGraph
     result = graph.invoke(initial_state)
 
-    # Save latest result
-    latest_farm_state = result
+    # Convert LangGraph result into a normal Python dictionary
+    latest_farm_state = dict(result)
+
+    print("LATEST FARM STATE:")
+    print(latest_farm_state)
 
     return {
         "status": "success",
         "message": "Sensor data received",
-        "hardware_command": result.get("hardware_command", 4)
+        "hardware_command": latest_farm_state.get("hardware_command", 4)
     }
 
 
 @app.get("/farm-status")
 def farm_status():
-    return latest_farm_state
+
+    print("FARM STATUS REQUEST:")
+    print(latest_farm_state)
+
+    return dict(latest_farm_state)
