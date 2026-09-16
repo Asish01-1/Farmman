@@ -203,6 +203,16 @@ or
 ACTION: ALERT
 or
 ACTION: NONE
+
+FORMAT RULES:
+- Do not use Markdown.
+- Do not use * or **.
+- Do not use # headings.
+- Do not use bullet symbols.
+- Write clean plain text.
+- Keep the response short and readable.
+- Use separate lines when presenting multiple pieces of information.
+- Use bold and slight bigger font size for any headings
 """
 
     result = llm.invoke(prompt)
