@@ -1086,12 +1086,12 @@ setInterval(
 // =====================================
 // SAVE FARM PROFILE
 // =====================================
+// =====================================
+// SAVE FARM PROFILE
+// =====================================
 
 const saveFarmBtn =
-    document.getElementById(
-        "saveFarmBtn"
-    );
-
+    document.getElementById("saveFarmBtn");
 
 if (saveFarmBtn) {
 
@@ -1099,45 +1099,20 @@ if (saveFarmBtn) {
         "click",
         async () => {
 
-            // IMPORTANT:
-            // These are the FARM SETUP input IDs.
-            // They are different from the
-            // dashboard display IDs.
-
             const crop =
-                document.getElementById(
-                    "farmCrop"
-                ).value.trim();
-
+                document.getElementById("farmCrop").value.trim();
 
             const cropStage =
-                document.getElementById(
-                    "farmCropStage"
-                ).value.trim();
-
+                document.getElementById("farmCropStage").value.trim();
 
             const soilType =
-                document.getElementById(
-                    "farmSoilType"
-                ).value.trim();
-
+                document.getElementById("farmSoilType").value.trim();
 
             const area =
-                document.getElementById(
-                    "farmArea"
-                ).value.trim();
+                document.getElementById("farmArea").value.trim();
 
 
-            // -------------------------------
-            // VALIDATION
-            // -------------------------------
-
-            if (
-                !crop ||
-                !cropStage ||
-                !soilType ||
-                !area
-            ) {
+            if (!crop || !cropStage || !soilType || !area) {
 
                 document.getElementById(
                     "farmSetupMessage"
@@ -1145,93 +1120,55 @@ if (saveFarmBtn) {
                     "Please fill in all farm details.";
 
                 return;
-
             }
 
 
-            // -------------------------------
-            // FARM DATA
-            // -------------------------------
-
             const farmData = {
-
                 crop: crop,
-
                 crop_stage: cropStage,
-
                 soil_type: soilType,
-
                 area: area
-
             };
 
 
             try {
 
-                const response =
-                    await fetch(
-                        "/farm-setup",
-                        {
-                            method: "POST",
+                const response = await fetch(
+                    "/farm-setup",
+                    {
+                        method: "POST",
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
 
-                            body:
-                                JSON.stringify(
-                                    farmData
-                                )
-                        }
+                        body: JSON.stringify(farmData)
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Failed to save farm profile."
                     );
-
-
-                const data =
-                    await response.json();
-
-
-                if (response.ok) {
-
-                    document.getElementById(
-                        "farmSetupMessage"
-                    ).textContent =
-                        "Farm profile saved successfully.";
-
-
-                    console.log(
-                        "Farm profile:",
-                        data.farm_profile
-                    );
-
-
-                    // Immediately show the
-                    // saved values in the
-                    // dashboard.
-
-                    updateDashboard({
-                        crop:
-                            data.farm_profile.crop,
-
-                        crop_stage:
-                            data.farm_profile.crop_stage,
-
-                        soil_type:
-                            data.farm_profile.soil_type,
-
-                        area:
-                            data.farm_profile.area
-                    });
-
-
-                } else {
-
-                    document.getElementById(
-                        "farmSetupMessage"
-                    ).textContent =
-                        "Failed to save farm profile.";
-
                 }
+
+
+                document.getElementById(
+                    "farmSetupMessage"
+                ).textContent =
+                    "Farm profile saved successfully.";
+
+
+                console.log(
+                    "Farm profile saved:",
+                    data.farm_profile
+                );
 
 
             } catch (error) {
@@ -1241,16 +1178,13 @@ if (saveFarmBtn) {
                     error
                 );
 
-
                 document.getElementById(
                     "farmSetupMessage"
                 ).textContent =
-                    "Connection error.";
+                    "Failed to save farm profile.";
 
             }
 
         }
-
     );
-
 }
