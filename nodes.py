@@ -212,6 +212,7 @@ FORMAT RULES:
 - Write clean plain text.
 - Keep the response short and readable.
 - Use separate lines when presenting multiple pieces of information.
+- Do not use any <tag> or <b> in heading insted just use : symbol to show case it is heading.
 """
 
     result = llm.invoke(prompt)
