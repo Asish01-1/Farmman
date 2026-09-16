@@ -482,3 +482,74 @@ setInterval(
     fetchFarmStatus,
     3000
 );
+
+const saveFarmBtn = document.getElementById("saveFarmBtn");
+
+if (saveFarmBtn) {
+
+    saveFarmBtn.addEventListener("click", async () => {
+
+        const crop = document.getElementById("crop").value;
+        const cropStage = document.getElementById("cropStage").value;
+        const soilType = document.getElementById("soilType").value;
+        const area = document.getElementById("area").value.trim();
+
+
+        if (!area) {
+
+            document.getElementById("farmSetupMessage").textContent =
+                "Please enter the farm area.";
+
+            return;
+        }
+
+
+        const farmData = {
+            crop: crop,
+            crop_stage: cropStage,
+            soil_type: soilType,
+            area: area
+        };
+
+
+        try {
+
+            const response = await fetch("/farm-setup", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(farmData)
+            });
+
+
+            const data = await response.json();
+
+
+            if (response.ok) {
+
+                document.getElementById("farmSetupMessage").textContent =
+                    "Farm profile saved successfully.";
+
+                console.log("Farm profile:", data.farm_profile);
+
+            } else {
+
+                document.getElementById("farmSetupMessage").textContent =
+                    "Failed to save farm profile.";
+            }
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById("farmSetupMessage").textContent =
+                "Connection error.";
+        }
+
+    });
+}

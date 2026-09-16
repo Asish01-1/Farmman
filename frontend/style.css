@@ -414,3 +414,42 @@ footer {
         gap: 15px;
     }
 }
+
+.setup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.form-group select,
+.form-group input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #111;
+    color: white;
+}
+
+#saveFarmBtn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#farmSetupMessage {
+    margin-top: 10px;
+    font-size: 13px;
+}

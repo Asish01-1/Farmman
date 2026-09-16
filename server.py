@@ -425,6 +425,76 @@
 
 
 
+# from fastapi import FastAPI
+# from fastapi.staticfiles import StaticFiles
+# from fastapi.responses import FileResponse
+# from pydantic import BaseModel
+
+# from graph import graph
+
+# app = FastAPI()
+
+# app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+
+# class SensorData(BaseModel):
+#     tempreature: float
+#     humidity: float
+#     soil_moisture: float
+
+
+# latest_farm_state = {}
+
+
+# @app.get("/")
+# def home():
+#     return FileResponse("frontend/index.html")
+
+
+# @app.get("/health")
+# def health():
+#     return {"status": "ROBOAI is running"}
+
+
+# @app.post("/sensor-data")
+# def receive_sensor_data(data: SensorData):
+
+#     global latest_farm_state
+
+#     initial_state = {
+#         "tempreature": data.tempreature,
+#         "humidity": data.humidity,
+#         "soil_moisture": data.soil_moisture,
+#         "crop": "Rice",
+#         "crop_stage": "Vegetative",
+#         "soil_type": "Loamy",
+#         "area": "Area A"
+#     }
+
+#     result = graph.invoke(initial_state)
+
+#     # Convert LangGraph result into a normal Python dictionary
+#     latest_farm_state = dict(result)
+
+#     print("LATEST FARM STATE:")
+#     print(latest_farm_state)
+
+#     return {
+#         "status": "success",
+#         "message": "Sensor data received",
+#         "hardware_command": latest_farm_state.get("hardware_command", 4)
+#     }
+
+
+# @app.get("/farm-status")
+# def farm_status():
+
+#     print("FARM STATUS REQUEST:")
+#     print(latest_farm_state)
+
+#     return dict(latest_farm_state)
+
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -437,24 +507,92 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 
+# =========================================================
+# MODELS
+# =========================================================
+
 class SensorData(BaseModel):
     tempreature: float
     humidity: float
     soil_moisture: float
 
 
+class FarmSetup(BaseModel):
+    crop: str
+    crop_stage: str
+    soil_type: str
+    area: str
+
+
+# =========================================================
+# MEMORY
+# =========================================================
+
 latest_farm_state = {}
 
+farm_profile = {
+    "crop": "Rice",
+    "crop_stage": "Vegetative",
+    "soil_type": "Loamy",
+    "area": "Area A"
+}
+
+
+# =========================================================
+# FRONTEND
+# =========================================================
 
 @app.get("/")
 def home():
     return FileResponse("frontend/index.html")
 
 
+# =========================================================
+# HEALTH
+# =========================================================
+
 @app.get("/health")
 def health():
-    return {"status": "ROBOAI is running"}
+    return {
+        "status": "ROBOAI is running"
+    }
 
+
+# =========================================================
+# FARM SETUP
+# =========================================================
+
+@app.post("/farm-setup")
+def update_farm_setup(data: FarmSetup):
+
+    global farm_profile
+
+    farm_profile = {
+        "crop": data.crop,
+        "crop_stage": data.crop_stage,
+        "soil_type": data.soil_type,
+        "area": data.area
+    }
+
+    print("FARM PROFILE UPDATED:")
+    print(farm_profile)
+
+    return {
+        "status": "success",
+        "message": "Farm profile saved",
+        "farm_profile": farm_profile
+    }
+
+
+@app.get("/farm-setup")
+def get_farm_setup():
+
+    return farm_profile
+
+
+# =========================================================
+# SENSOR DATA
+# =========================================================
 
 @app.post("/sensor-data")
 def receive_sensor_data(data: SensorData):
@@ -462,18 +600,22 @@ def receive_sensor_data(data: SensorData):
     global latest_farm_state
 
     initial_state = {
+        # Real sensor values
         "tempreature": data.tempreature,
         "humidity": data.humidity,
         "soil_moisture": data.soil_moisture,
-        "crop": "Rice",
-        "crop_stage": "Vegetative",
-        "soil_type": "Loamy",
-        "area": "Area A"
+
+        # Farm profile
+        "crop": farm_profile["crop"],
+        "crop_stage": farm_profile["crop_stage"],
+        "soil_type": farm_profile["soil_type"],
+        "area": farm_profile["area"]
     }
 
+    # Run LangGraph
     result = graph.invoke(initial_state)
 
-    # Convert LangGraph result into a normal Python dictionary
+    # Save latest complete state
     latest_farm_state = dict(result)
 
     print("LATEST FARM STATE:")
@@ -482,14 +624,18 @@ def receive_sensor_data(data: SensorData):
     return {
         "status": "success",
         "message": "Sensor data received",
-        "hardware_command": latest_farm_state.get("hardware_command", 4)
+        "hardware_command": latest_farm_state.get(
+            "hardware_command",
+            4
+        )
     }
 
 
+# =========================================================
+# FARM STATUS
+# =========================================================
+
 @app.get("/farm-status")
 def farm_status():
-
-    print("FARM STATUS REQUEST:")
-    print(latest_farm_state)
 
     return dict(latest_farm_state)
