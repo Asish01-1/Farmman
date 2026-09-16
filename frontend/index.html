@@ -42,72 +42,7 @@
         </div>
 
 
-        <section class="panel">
-    <div class="panel-title">FARM SETUP</div>
-
-    <div class="setup-grid">
-
-        <div class="form-group">
-            <label for="crop">CROP</label>
-
-            <select id="crop">
-                <option value="Rice">Rice</option>
-                <option value="Tomato">Tomato</option>
-                <option value="Potato">Potato</option>
-                <option value="Wheat">Wheat</option>
-                <option value="Maize">Maize</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-
-
-        <div class="form-group">
-            <label for="cropStage">CROP STAGE</label>
-
-            <select id="cropStage">
-                <option value="Seedling">Seedling</option>
-                <option value="Vegetative">Vegetative</option>
-                <option value="Flowering">Flowering</option>
-                <option value="Fruiting">Fruiting</option>
-                <option value="Maturity">Maturity</option>
-            </select>
-        </div>
-
-
-        <div class="form-group">
-            <label for="soilType">SOIL TYPE</label>
-
-            <select id="soilType">
-                <option value="Loamy">Loamy</option>
-                <option value="Clay">Clay</option>
-                <option value="Sandy">Sandy</option>
-                <option value="Silty">Silty</option>
-                <option value="Black Soil">Black Soil</option>
-                <option value="Red Soil">Red Soil</option>
-            </select>
-        </div>
-
-
-        <div class="form-group">
-            <label for="area">AREA</label>
-
-            <input
-                type="text"
-                id="area"
-                placeholder="Example: Area A"
-            >
-        </div>
-
-    </div>
-
-
-    <button id="saveFarmBtn">
-        SAVE FARM PROFILE
-    </button>
-
-    <div id="farmSetupMessage"></div>
-
-</section>
+        
 
         <div id="connectionStatus"
              class="status">
@@ -119,7 +54,55 @@
         </div>
 
     </header>
+    <section class="panel">
+    <div class="panel-title">FARM SETUP</div>
 
+    <div class="setup-grid">
+
+        <div class="form-group">
+            <label for="crop">CROP</label>
+            <input
+                type="text"
+                id="crop"
+                placeholder="Example: Rice"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="cropStage">CROP STAGE</label>
+            <input
+                type="text"
+                id="cropStage"
+                placeholder="Example: Vegetative"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="soilType">SOIL TYPE</label>
+            <input
+                type="text"
+                id="soilType"
+                placeholder="Example: Loamy"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="area">AREA</label>
+            <input
+                type="text"
+                id="area"
+                placeholder="Example: Area A"
+            >
+        </div>
+
+    </div>
+
+    <button id="saveFarmBtn">
+        SAVE FARM PROFILE
+    </button>
+
+    <div id="farmSetupMessage"></div>
+</section>
 
     <!-- CONTROLS -->
 
