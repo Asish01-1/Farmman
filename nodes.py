@@ -212,7 +212,6 @@ FORMAT RULES:
 - Write clean plain text.
 - Keep the response short and readable.
 - Use separate lines when presenting multiple pieces of information.
-- Use bold and slight bigger font size for any headings
 """
 
     result = llm.invoke(prompt)
