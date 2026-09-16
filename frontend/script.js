@@ -1089,102 +1089,58 @@ setInterval(
 // =====================================
 // SAVE FARM PROFILE
 // =====================================
-
-const saveFarmBtn =
-    document.getElementById("saveFarmBtn");
+const saveFarmBtn = document.getElementById("saveFarmBtn");
 
 if (saveFarmBtn) {
+    saveFarmBtn.addEventListener("click", async () => {
 
-    saveFarmBtn.addEventListener(
-        "click",
-        async () => {
+        const crop = document.getElementById("farmCrop").value.trim();
+        const cropStage = document.getElementById("farmCropStage").value.trim();
+        const soilType = document.getElementById("farmSoilType").value.trim();
+        const area = document.getElementById("farmArea").value.trim();
 
-            const crop =
-                document.getElementById("farmCrop").value.trim();
-
-            const cropStage =
-                document.getElementById("farmCropStage").value.trim();
-
-            const soilType =
-                document.getElementById("farmSoilType").value.trim();
-
-            const area =
-                document.getElementById("farmArea").value.trim();
-
-
-            if (!crop || !cropStage || !soilType || !area) {
-
-                document.getElementById(
-                    "farmSetupMessage"
-                ).textContent =
-                    "Please fill in all farm details.";
-
-                return;
-            }
-
-
-            const farmData = {
-                crop: crop,
-                crop_stage: cropStage,
-                soil_type: soilType,
-                area: area
-            };
-
-
-            try {
-
-                const response = await fetch(
-                    "/farm-setup",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify(farmData)
-                    }
-                );
-
-
-                const data = await response.json();
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        data.detail ||
-                        "Failed to save farm profile."
-                    );
-                }
-
-
-                document.getElementById(
-                    "farmSetupMessage"
-                ).textContent =
-                    "Farm profile saved successfully.";
-
-
-                console.log(
-                    "Farm profile saved:",
-                    data.farm_profile
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Farm setup error:",
-                    error
-                );
-
-                document.getElementById(
-                    "farmSetupMessage"
-                ).textContent =
-                    "Failed to save farm profile.";
-
-            }
-
+        if (!crop || !cropStage || !soilType || !area) {
+            document.getElementById("farmSetupMessage").textContent =
+                "Please fill all farm details.";
+            return;
         }
-    );
+
+        const farmData = {
+            crop: crop,
+            crop_stage: cropStage,
+            soil_type: soilType,
+            area: area
+        };
+
+        try {
+            const response = await fetch("/farm-setup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(farmData)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.detail || "Failed to save farm profile");
+            }
+
+            // Update dashboard immediately
+            document.getElementById("crop").textContent = crop;
+            document.getElementById("cropStage").textContent = cropStage;
+            document.getElementById("soilType").textContent = soilType;
+            document.getElementById("area").textContent = area;
+
+            document.getElementById("farmSetupMessage").textContent =
+                "Farm profile saved successfully.";
+
+        } catch (error) {
+            console.error("Farm setup error:", error);
+
+            document.getElementById("farmSetupMessage").textContent =
+                "Failed to save farm profile.";
+        }
+    });
 }
